@@ -1,10 +1,8 @@
 package repositorio;
 
 
-import model.Aluno;
-import model.Curso;
-import model.Diciplina;
-import model.Professores;
+import com.sun.tools.javac.Main;
+import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +10,33 @@ import java.util.List;
 
 public class PostgresConnection implements Repositorio {
 
+    public PostgresConnection(){
+        cursos();
+        disciplinas();
+        professores();
+
+    }
+    public  List<Professores> professoresList() throws SQLException {
+        List<Professores> professoresList = professores();
+
+        for (Curso curso: cursos()) {
+            for (int i = 0;  i<professores().size(); i++) {
+                PreparedStatement preparedStatement =
+                        connection
+                                .prepareStatement("SELECT * FROM professores WHERE cod_curso = " +curso.getCodigoCurso());
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()){
+                    if(resultSet.getInt(1) == professores().get(i).getCodigoProfessor()){
+                        professores().get(i).setCodigoCurso(curso);
+                        professoresList.get(i).setCodigoCurso(curso) ;}
+
+                }
+            }
+
+        }
+        return professoresList;
+    }
     public Connection connectar(String dbname, String user, String pass) {
 
         Connection conn = null;
@@ -74,6 +99,14 @@ public class PostgresConnection implements Repositorio {
         return null;
 
     }
+    public Diciplina disciplina(int resultset){
+        for (Diciplina disciplina: disciplinas()) {
+            if(disciplina.getCodigoDisciplina() == resultset){
+                return disciplina;
+            }
+        }
+        return null;
+    }
 
     @Override
     public List<Professores> professores()  {
@@ -82,10 +115,6 @@ public class PostgresConnection implements Repositorio {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM professores");
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                //System.out.println(resultSet.getInt(2));
-                // System.out.println(curso(resultSet.getInt(2)));
-                //curso(resultSet.getInt(2));
-                //cursos().forEach(System.out::println);
                 professores.add(
                         new Professores(
                                 resultSet.getInt(1),
@@ -125,6 +154,37 @@ public class PostgresConnection implements Repositorio {
 
         }
         return disciplinas;
+    }
+
+    @Override
+    public List<Turma> turmas() {
+        List<Turma> turmas = new ArrayList<>();
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM turmas");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                turmas.add(
+                        new Turma(
+                            resultSet.getInt(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(4),
+                            disciplina(resultSet.getInt(3)),
+                            resultSet.getInt(5),
+                            resultSet.getInt(6),
+                            professor(resultSet.getInt(7))
+                        )
+                );
+            }
+
+        }catch (Exception ex){
+
+        }
+        return turmas;
+    }
+
+    @Override
+    public List<TurmasMatricula> turmasMatriculadas() {
+        return null;
     }
 
     @Override

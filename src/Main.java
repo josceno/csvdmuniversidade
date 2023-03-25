@@ -14,7 +14,7 @@ import java.util.List;
 public class Main {
     Repositorio repositorio = new PostgresConnection();
     Connection connection = repositorio.connectar("ETL-UNIVERSIDADE","postgres","changeme");
-    public List<Diciplina> diciplinaList() throws SQLException {
+    public  List<Diciplina> diciplinaList() throws SQLException {
         List<Diciplina> diciplinaList = repositorio.disciplinas();
         for (int i = 0; i < repositorio.disciplinas().size() ; i++) {
             PreparedStatement preparedStatement = connection
@@ -50,7 +50,7 @@ public class Main {
         return diciplinaList;
 
     }
-    public List<Professores> professoresList() throws SQLException {
+    public  List<Professores> professoresList() throws SQLException {
         List<Professores> professoresList = repositorio.professores();
 
         for (Curso curso: repositorio.cursos()) {
@@ -75,13 +75,15 @@ public class Main {
         Repositorio repositorio = new PostgresConnection();
 
 
-        Main prin = new Main();
-        repositorio.cursos();
+        PostgresConnection prin = new PostgresConnection();
+
         for (int i = 0; i < 3; i++) {
             //repositorio.cursos().forEach(System.out::println);
             prin.professoresList().forEach(System.out::println);
-
+            //prin.diciplinaList()
             //repositorio.alunos().forEach(System.out::println);
+           repositorio.turmas().forEach(System.out::println);
+
             /*for (Diciplina d: prin.diciplinaList()) {
                    try {
                        System.out.println(d);

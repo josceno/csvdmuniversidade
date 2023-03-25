@@ -63,7 +63,7 @@ public class Professores {
     public String toString() {
         return "Professores{" +
                 "codigoProfessor=" + codigoProfessor +
-                ", codigoCurso=" + codigoCurso.getCodigoCurso() +
+                ", codigoCurso=" + codigoCurso +
                 ", nomeProfessor='" + nomeProfessor + '\'' +
                 ", email='" + email + '\'' +
                 '}';

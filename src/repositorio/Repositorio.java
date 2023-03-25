@@ -1,9 +1,6 @@
 package repositorio;
 
-import model.Aluno;
-import model.Curso;
-import model.Diciplina;
-import model.Professores;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +11,8 @@ public interface Repositorio {
     public List<Aluno> alunos();
     public List<Curso> cursos();
     public List<Professores> professores() throws SQLException;
-    List<Diciplina> disciplinas();
+    public  List<Diciplina> disciplinas();
+    public  List<Turma> turmas();
+    public  List<TurmasMatricula> turmasMatriculadas();
 
 }
