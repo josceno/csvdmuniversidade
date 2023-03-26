@@ -1,6 +1,6 @@
 package repositorio;
 
-import model.*;
+import modelo_relacional.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,5 +14,6 @@ public interface Repositorio {
     public  List<Diciplina> disciplinas();
     public  List<Turma> turmas();
     public  List<TurmasMatricula> turmasMatriculadas();
+    public  List<HistoricosEscolares> historcosEscolares();
 
 }

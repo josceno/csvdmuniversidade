@@ -1,6 +1,5 @@
-package model;
+package modelo_relacional;
 
-import java.sql.Date;
 import java.util.Objects;
 
 public class Curso {

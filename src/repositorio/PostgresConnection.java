@@ -1,19 +1,23 @@
 package repositorio;
 
 
-import com.sun.tools.javac.Main;
-import model.*;
+import modelo_relacional.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostgresConnection implements Repositorio {
+    int limit = 5;
 
     public PostgresConnection(){
         cursos();
         disciplinas();
         professores();
+        alunos();
+        historcosEscolares();
+        turmasMatriculadas();
+        turmas();
 
     }
     public  List<Diciplina> diciplinaList() throws SQLException {
@@ -53,8 +57,7 @@ public class PostgresConnection implements Repositorio {
         for (Curso curso: cursos()) {
             for (int i = 0;  i<professores().size(); i++) {
                 PreparedStatement preparedStatement =
-                        connection
-                                .prepareStatement("SELECT * FROM professores WHERE cod_curso = " +curso.getCodigoCurso());
+                        connection.prepareStatement("SELECT * FROM professores WHERE cod_curso = " +curso.getCodigoCurso());
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()){
@@ -186,6 +189,14 @@ public class PostgresConnection implements Repositorio {
         }
         return disciplinas;
     }
+    public Aluno aluno(int resultset){
+        for (Aluno aluno: alunos()){
+            if(aluno.getMatricula() == resultset){
+                return  aluno;
+            }
+        }
+        return null;
+    }
 
     @Override
     public List<Turma> turmas() {
@@ -208,14 +219,76 @@ public class PostgresConnection implements Repositorio {
             }
 
         }catch (Exception ex){
-
+            ex.printStackTrace();
         }
         return turmas;
     }
 
     @Override
     public List<TurmasMatricula> turmasMatriculadas() {
-        return null;
+        List<TurmasMatricula> turmasMatriculadas = new ArrayList<>();
+        try{
+            //PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM turmas_matriculadas");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM turmas_matriculadas LIMIT "+limit);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int i = 0;
+            while (resultSet.next()){
+                i++;
+                System.out.println("turmas:"+ i+" de "+limit);
+                turmasMatriculadas.add(
+                        new TurmasMatricula(
+                                resultSet.getInt(1),
+                                resultSet.getInt(2),
+                                disciplina(resultSet.getInt(3)),
+                                resultSet.getString(4),
+                                aluno(resultSet.getInt(5)),
+                                resultSet.getInt(6),
+                                resultSet.getInt(7),
+                                resultSet.getInt(8),
+                                resultSet.getInt(9),
+                                resultSet.getInt(10),
+                                resultSet.getInt(11),
+                                resultSet.getInt(12)
+                        )
+                );
+
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        turmasMatriculadas.forEach(System.out::println);
+        return turmasMatriculadas;
+    }
+
+    @Override
+    public List<HistoricosEscolares> historcosEscolares() {
+        List<HistoricosEscolares> historicosEscolares = new ArrayList<>();
+        try {
+            //PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Historicos_Escolares");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Historicos_Escolares LIMIT "+limit);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int i = 0;
+            while (resultSet.next()){
+                i++;
+                System.out.println("Carregando hitorico:"+ i+" de "+limit);
+                historicosEscolares.add(
+                        new HistoricosEscolares(
+                        resultSet.getInt(1),
+                        resultSet.getInt(2),
+                        aluno(resultSet.getInt(4)),
+                        disciplina(resultSet.getInt(3)),
+                        resultSet.getDouble(5),
+                        resultSet.getInt(6),
+                        resultSet.getString(7)
+                        )
+                );
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return historicosEscolares;
     }
 
     @Override
@@ -242,7 +315,7 @@ public class PostgresConnection implements Repositorio {
 
 
         }catch (Exception ex){
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
         }
         return alunos;
     }

@@ -1,19 +1,22 @@
-package model;
+package modelo_relacional;
 
 public class HistoricosEscolares {
     private int ano;
     private int semestre;
     private Aluno aluno;
     private Diciplina diciplina;
+
     private double media;
+    private  int faltas;
     private String situacao;
 
-    public HistoricosEscolares(int ano, int semestre, Aluno aluno, Diciplina diciplina, double media, String situacao) {
+    public HistoricosEscolares(int ano, int semestre, Aluno aluno, Diciplina diciplina, double media,int faltas, String situacao) {
         this.ano = ano;
         this.semestre = semestre;
         this.aluno = aluno;
         this.diciplina = diciplina;
         this.media = media;
+        this.faltas =  faltas;
         this.situacao = situacao;
     }
 
@@ -27,6 +30,14 @@ public class HistoricosEscolares {
 
     public int getSemestre() {
         return semestre;
+    }
+
+    public int getFaltas() {
+        return faltas;
+    }
+
+    public void setFaltas(int faltas) {
+        this.faltas = faltas;
     }
 
     public void setSemestre(int semestre) {

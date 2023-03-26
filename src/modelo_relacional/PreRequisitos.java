@@ -1,4 +1,4 @@
-package model;
+package modelo_relacional;
 
 public class PreRequisitos {
     private Diciplina diciplina;

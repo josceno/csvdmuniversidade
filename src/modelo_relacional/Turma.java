@@ -1,4 +1,4 @@
-package model;
+package modelo_relacional;
 
 import java.util.Objects;
 
