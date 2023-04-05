@@ -8,18 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostgresConnection implements Repositorio {
-    int limit = 5;
+    int limit = 1;
 
-    public PostgresConnection(){
-        cursos();
-        disciplinas();
-        professores();
-        alunos();
-        historcosEscolares();
-        turmasMatriculadas();
-        turmas();
+    public PostgresConnection()  {
+        try{
+            cursos();
+            disciplinas();
+            professores();
+            alunos();
+            historcosEscolares();
+            turmasMatriculadas();
+            turmas();
+            curriculos();
+
+            diciplinaList();
+            professoresList();
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
 
     }
+
+    @Override
     public  List<Diciplina> diciplinaList() throws SQLException {
         List<Diciplina> diciplinaList = disciplinas();
         for (int i = 0; i < disciplinas().size() ; i++) {
@@ -51,6 +63,7 @@ public class PostgresConnection implements Repositorio {
         return diciplinaList;
 
     }
+    @Override
     public  List<Professores> professoresList() throws SQLException {
         List<Professores> professoresList = professores();
 
@@ -88,7 +101,7 @@ public class PostgresConnection implements Repositorio {
         }
         return conn;
     }
-    private final Connection connection = connectar("ETL-UNIVERSIDADE","postgres","changeme");
+    public final Connection connection = connectar("ETL-UNIVERSIDADE","postgres","changeme");
     @Override
     public List<Curso> cursos() {
         List<Curso> cursos = new ArrayList<>();
@@ -100,7 +113,7 @@ public class PostgresConnection implements Repositorio {
                     new Curso(
                     resultSet.getInt(1),
                     resultSet.getInt(2),
-                    resultSet.getString(3),
+                    resultSet.getString(3).toUpperCase(),
                     professor(resultSet.getInt(4))
                     )
                 );
@@ -153,8 +166,8 @@ public class PostgresConnection implements Repositorio {
                         new Professores(
                                 resultSet.getInt(1),
                                 null,
-                                resultSet.getString(3),
-                                resultSet.getString(4)
+                                resultSet.getString(3).toUpperCase(),
+                                resultSet.getString(4).toUpperCase()
                         )
                 );
             }
@@ -179,7 +192,7 @@ public class PostgresConnection implements Repositorio {
                         new Diciplina(
                                 resultSet.getInt(1),
                                 resultSet.getInt(2),
-                                resultSet.getString(3),
+                                resultSet.getString(3).toUpperCase(),
                                 null
                         )
                 );
@@ -209,7 +222,7 @@ public class PostgresConnection implements Repositorio {
                         new Turma(
                             resultSet.getInt(1),
                             resultSet.getInt(2),
-                            resultSet.getString(4),
+                            resultSet.getString(4).toUpperCase(),
                             disciplina(resultSet.getInt(3)),
                             resultSet.getInt(5),
                             resultSet.getInt(6),
@@ -240,7 +253,7 @@ public class PostgresConnection implements Repositorio {
                                 resultSet.getInt(1),
                                 resultSet.getInt(2),
                                 disciplina(resultSet.getInt(3)),
-                                resultSet.getString(4),
+                                resultSet.getString(4).toUpperCase(),
                                 aluno(resultSet.getInt(5)),
                                 resultSet.getInt(6),
                                 resultSet.getInt(7),
@@ -257,7 +270,6 @@ public class PostgresConnection implements Repositorio {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        turmasMatriculadas.forEach(System.out::println);
         return turmasMatriculadas;
     }
 
@@ -280,7 +292,7 @@ public class PostgresConnection implements Repositorio {
                         disciplina(resultSet.getInt(3)),
                         resultSet.getDouble(5),
                         resultSet.getInt(6),
-                        resultSet.getString(7)
+                        resultSet.getString(7).toUpperCase()
                         )
                 );
             }
@@ -289,6 +301,30 @@ public class PostgresConnection implements Repositorio {
             ex.printStackTrace();
         }
         return historicosEscolares;
+    }
+
+    @Override
+    public List<Curriculo> curriculos() {
+        List<Curriculo> curriculos = new ArrayList<>();
+        try {
+            //PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Historicos_Escolares");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM curriculos");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                curriculos.add(
+                        new Curriculo(
+                            curso(resultSet.getInt(1)),
+                            disciplina(resultSet.getInt(2)),
+                            resultSet.getInt(3)
+                        )
+
+                );
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return curriculos;
     }
 
     @Override
@@ -307,8 +343,8 @@ public class PostgresConnection implements Repositorio {
                                 resultSet.getDate(3),
                                 resultSet.getInt(4),
                                 resultSet.getDouble(5),
-                                resultSet.getString(6),
-                                resultSet.getString(7)
+                                resultSet.getString(6).toUpperCase(),
+                                resultSet.getString(7).toUpperCase()
                         )
                 );
             }

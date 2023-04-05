@@ -10,10 +10,14 @@ public interface Repositorio {
     public Connection connectar(String dbname, String user, String pass);
     public List<Aluno> alunos();
     public List<Curso> cursos();
-    public List<Professores> professores() throws SQLException;
+    public List<Professores> professores() throws Exception;
     public  List<Diciplina> disciplinas();
     public  List<Turma> turmas();
     public  List<TurmasMatricula> turmasMatriculadas();
     public  List<HistoricosEscolares> historcosEscolares();
+    public List<Curriculo> curriculos();
+
+    public List<Diciplina> diciplinaList() throws Exception;
+    public List<Professores> professoresList() throws Exception;
 
 }

@@ -8,6 +8,7 @@ public class Professores {
     private String nomeProfessor;
     private  String email;
 
+    public Professores(){}
     public Professores(int codigoProfessor, Curso codigoCurso, String nomeProfessor, String email) {
         this.codigoProfessor = codigoProfessor;
         this.codigoCurso = codigoCurso;

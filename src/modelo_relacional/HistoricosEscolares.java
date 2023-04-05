@@ -5,7 +5,6 @@ public class HistoricosEscolares {
     private int semestre;
     private Aluno aluno;
     private Diciplina diciplina;
-
     private double media;
     private  int faltas;
     private String situacao;

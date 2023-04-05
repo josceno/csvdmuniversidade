@@ -3,20 +3,27 @@ package modelo_relacional;
 import java.util.Objects;
 
 public class Curriculo {
-      private int codigo;
+
       private Curso codCurso;
       private Diciplina codDiciplina;
       private int periodo;
 
-    public Curriculo(int codigo, Curso codCurso, Diciplina codDiciplina, int periodo) {
-        this.codigo = codigo;
+    public Curriculo(Curso codCurso, Diciplina codDiciplina, int periodo) {
         this.codCurso = codCurso;
         this.codDiciplina = codDiciplina;
         this.periodo = periodo;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public Curso getCodCurso() {
+        return codCurso;
+    }
+
+    public Diciplina getCodDiciplina() {
+        return codDiciplina;
+    }
+
+    public int getPeriodo() {
+        return periodo;
     }
 
     public void setCodCurso(Curso codCurso) {
@@ -35,18 +42,17 @@ public class Curriculo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Curriculo curriculo)) return false;
-        return codigo == curriculo.codigo && periodo == curriculo.periodo && codCurso.equals(curriculo.codCurso) && codDiciplina.equals(curriculo.codDiciplina);
+        return periodo == curriculo.periodo && codCurso.equals(curriculo.codCurso) && codDiciplina.equals(curriculo.codDiciplina);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo, codCurso, codDiciplina, periodo);
+        return Objects.hash(codCurso, codDiciplina, periodo);
     }
 
     @Override
     public String toString() {
         return "Curriculo{" +
-                "codigo=" + codigo +
                 ", codCurso=" + codCurso +
                 ", codDiciplina=" + codDiciplina +
                 ", periodo=" + periodo +
